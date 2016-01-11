@@ -189,21 +189,24 @@ namespace CatchMeUp.WinForms
 
         private void buttonJoinGame_Click(object sender, EventArgs e)
         {
-            var selected = listBoxLobby.SelectedItem.ToString();
-
-            var gameSession = _gameSessions.FirstOrDefault(s => selected.Contains(s.GetKey()));
-            if (gameSession != null)
+            if (listBoxLobby.SelectedItem != null)
             {
-                var random = new Random();
-                using (var game = new GameForm(gameSession, new GameMulticastPacket()
+                var selected = listBoxLobby.SelectedItem.ToString();
+
+                var gameSession = _gameSessions.FirstOrDefault(s => selected.Contains(s.GetKey()));
+                if (gameSession != null)
                 {
-                    PlayerName = "Mark",
-                    Team = Team.Hunted,
-                    PosX = random.Next(0, 600),
-                    PosY = random.Next(0, 400)
-                }))
-                {
-                    game.Run();
+                    var random = new Random();
+                    using (var game = new GameForm(gameSession, new GameMulticastPacket()
+                    {
+                        PlayerName = "Mark",
+                        Team = Team.Hunted,
+                        PosX = random.Next(0, 600),
+                        PosY = random.Next(0, 400)
+                    }))
+                    {
+                        game.Run();
+                    }
                 }
             }
         }

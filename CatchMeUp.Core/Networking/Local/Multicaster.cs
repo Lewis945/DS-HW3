@@ -58,11 +58,33 @@ namespace CatchMeUp.Core.Networking.Local
                     int length;
                     udpclient.Send(packet.Pack(out length), length, remoteEp);
 
+                    Thread.Sleep(100);
+
                     //if ((packet as GameMulticastPacket).Move != 0)
                     //    Debug.WriteLine("Send " + packet.ToString());
                 }
             });
             threadMulticast.Start();
+
+            //UdpClient udpclient = new UdpClient();
+
+            //IPAddress multicastaddress = IPAddress.Parse("239.0.0.222");
+            //udpclient.JoinMulticastGroup(multicastaddress);
+            //IPEndPoint remoteep = new IPEndPoint(multicastaddress, 2222);
+
+            //Byte[] buffer = null;
+
+            //var threadMulticast = new Thread(() =>
+            //{
+            //    while (true)
+            //    {
+            //        buffer = Encoding.Unicode.GetBytes("222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222");
+            //        udpclient.Send(buffer, buffer.Length, remoteep);
+
+            //        Thread.Sleep(500);
+            //    }
+            //});
+            //threadMulticast.Start();
         }
 
         public static void ListenToGameSession<T>(string ip, Action<T, IPEndPoint> callback, Func<T> sendAction)
@@ -151,10 +173,36 @@ namespace CatchMeUp.Core.Networking.Local
                     var responseData = sendAction();
                     int length;
                     client.Send(responseData.Pack(out length), length, remoteEp);
+
+                    Thread.Sleep(100);
                 }
             });
 
             threadSend.Start();
+
+            //UdpClient client = new UdpClient();
+
+            //client.ExclusiveAddressUse = false;
+            //IPEndPoint localEp = new IPEndPoint(IPAddress.Any, 2222);
+
+            //client.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+            //client.ExclusiveAddressUse = false;
+
+            //client.Client.Bind(localEp);
+
+            //IPAddress multicastaddress = IPAddress.Parse("239.0.0.222");
+            //client.JoinMulticastGroup(multicastaddress);
+
+            //var threadListen = new Thread(() =>
+            //{
+            //    while (true)
+            //    {
+            //        Byte[] data = client.Receive(ref localEp);
+            //        string strData = Encoding.Unicode.GetString(data);
+            //        Console.WriteLine(strData);
+            //    }
+            //});
+            //threadListen.Start();
         }
     }
 }
