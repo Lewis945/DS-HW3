@@ -7,3 +7,8 @@ E:\Projects 2\Catch me up\CatchMeUp.Core\bin\Debug\CatchMeUp.Core.dll
 E:\Projects 2\Catch me up\CatchMeUp.Core\bin\Debug\CatchMeUp.Core.pdb
 E:\Projects 2\Catch me up\CatchMeUp.Core\obj\Debug\CatchMeUp.Core.dll
 E:\Projects 2\Catch me up\CatchMeUp.Core\obj\Debug\CatchMeUp.Core.pdb
+C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.Core\bin\Debug\CatchMeUp.Core.dll
+C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.Core\bin\Debug\CatchMeUp.Core.pdb
+C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.Core\obj\Debug\CatchMeUp.Core.csprojResolveAssemblyReference.cache
+C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.Core\obj\Debug\CatchMeUp.Core.dll
+C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.Core\obj\Debug\CatchMeUp.Core.pdb

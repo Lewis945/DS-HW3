@@ -12,7 +12,7 @@ namespace CatchMeUp.Core.Networking.Local
 {
     public class Multicaster
     {
-        public static int Port { get; set; } = 9999;
+        public static int Port { get; set; } = 26294;
         public static int Time { get; set; } = 5000;
 
         public static bool Send { get; set; } = true;
@@ -24,8 +24,6 @@ namespace CatchMeUp.Core.Networking.Local
             where T : IBytePacket
         {
             var udpclient = new UdpClient();
-
-            var localEndPoint = new IPEndPoint(IPAddress.Any, Port);
 
             var multicastaddress = IPAddress.Parse(ip);
             udpclient.JoinMulticastGroup(multicastaddress);
@@ -49,12 +47,13 @@ namespace CatchMeUp.Core.Networking.Local
             where T : IBytePacket
         {
             var localEp = new IPEndPoint(IPAddress.Any, Port);
-            var localAddress = Dns.GetHostEntry(Dns.GetHostName()).AddressList.FirstOrDefault(ipa => ipa.AddressFamily == AddressFamily.InterNetwork);
 
             var udpclient = new UdpClient();
             if (LocalComputer)
             {
+                udpclient.ExclusiveAddressUse = false;
                 udpclient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+                udpclient.ExclusiveAddressUse = false;
             }
             udpclient.Client.Bind(localEp);
 

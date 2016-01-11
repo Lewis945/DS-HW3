@@ -13,7 +13,7 @@ namespace CatchMeUp.Core.Networking.Local
     public class Broadcaster<T> 
         where T : IBytePacket
     {
-        public static int Port { get; set; } = 8888;
+        public static int Port { get; set; } = 26194;
         public static int Time { get; set; } = 2000;
 
         public static bool Send { get; set; } = true;
@@ -58,6 +58,7 @@ namespace CatchMeUp.Core.Networking.Local
             if (LocalComputer)
             {
                 socketListener.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+                socketListener.ExclusiveAddressUse = false;
             }
             socketListener.Bind(localEndPoint);
 

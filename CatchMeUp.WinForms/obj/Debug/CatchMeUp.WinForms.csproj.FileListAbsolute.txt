@@ -29,3 +29,17 @@ E:\Projects 2\Catch me up\CatchMeUp.WinForms\bin\Debug\Content\hunterPlayerSheet
 C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.WinForms\bin\Debug\CatchMeUp.WinForms.exe.config
 C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.WinForms\obj\Debug\CatchMeUp.WinForms.exe
 C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.WinForms\obj\Debug\CatchMeUp.WinForms.pdb
+C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.WinForms\bin\Debug\Content\huntedPlayerSheet.png
+C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.WinForms\bin\Debug\Content\hunterPlayerSheet.png
+C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.WinForms\bin\Debug\CatchMeUp.WinForms.exe
+C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.WinForms\bin\Debug\CatchMeUp.WinForms.pdb
+C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.WinForms\bin\Debug\CatchMeUp.Client.exe
+C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.WinForms\bin\Debug\CatchMeUp.Core.dll
+C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.WinForms\bin\Debug\MonoGame.Framework.dll
+C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.WinForms\bin\Debug\OpenTK.dll
+C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.WinForms\bin\Debug\CatchMeUp.Client.pdb
+C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.WinForms\bin\Debug\CatchMeUp.Core.pdb
+C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.WinForms\obj\Debug\CatchMeUp.WinForms.csprojResolveAssemblyReference.cache
+C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.WinForms\obj\Debug\CatchMeUp.WinForms.Home.resources
+C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.WinForms\obj\Debug\CatchMeUp.WinForms.Properties.Resources.resources
+C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.WinForms\obj\Debug\CatchMeUp.WinForms.csproj.GenerateResource.Cache

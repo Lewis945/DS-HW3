@@ -11,3 +11,16 @@ E:\Projects 2\Catch me up\CatchMeUp.Client.Windows\bin\WindowsGL\Debug\CatchMeUp
 E:\Projects 2\Catch me up\CatchMeUp.Client.Windows\bin\WindowsGL\Debug\Lidgren.Network.dll
 E:\Projects 2\Catch me up\CatchMeUp.Client.Windows\bin\WindowsGL\Debug\Content\huntedPlayerSheet.png
 E:\Projects 2\Catch me up\CatchMeUp.Client.Windows\bin\WindowsGL\Debug\Content\hunterPlayerSheet.png
+C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.Client.Windows\bin\WindowsGL\Debug\Content\huntedPlayerSheet.png
+C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.Client.Windows\bin\WindowsGL\Debug\Content\hunterPlayerSheet.png
+C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.Client.Windows\bin\WindowsGL\Debug\CatchMeUp.Client.exe.config
+C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.Client.Windows\bin\WindowsGL\Debug\CatchMeUp.Client.exe
+C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.Client.Windows\bin\WindowsGL\Debug\CatchMeUp.Client.pdb
+C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.Client.Windows\bin\WindowsGL\Debug\CatchMeUp.Core.dll
+C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.Client.Windows\bin\WindowsGL\Debug\Lidgren.Network.dll
+C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.Client.Windows\bin\WindowsGL\Debug\OpenTK.dll
+C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.Client.Windows\bin\WindowsGL\Debug\Tao.Sdl.dll
+C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.Client.Windows\bin\WindowsGL\Debug\CatchMeUp.Core.pdb
+C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.Client.Windows\obj\x86\Debug\CatchMeUp.Client.csprojResolveAssemblyReference.cache
+C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.Client.Windows\obj\x86\Debug\CatchMeUp.Client.exe
+C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.Client.Windows\obj\x86\Debug\CatchMeUp.Client.pdb
