@@ -114,6 +114,7 @@ namespace CatchMeUp.WinForms
             {
                 PlayerName = "Jonny",
                 Team = Team.Hunter,
+                Move = Core.Game.Move.None,
                 PosX = random.Next(0, 600),
                 PosY = random.Next(0, 400)
             };

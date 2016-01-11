@@ -121,7 +121,7 @@ namespace CatchMeUp.Client
 
                     Thread.Sleep(1000);
 
-                    move = (Move)rnd.Next(1, 4);
+                    move = (Move)rnd.Next(0, 4);
                 }
             });
 

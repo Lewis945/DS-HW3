@@ -15,7 +15,7 @@ namespace CatchMeUp.Client
         /// <summary>
         /// Determines the direction of the current animation
         /// </summary>
-        public Move Move { get; set; }
+        protected Move Direction { get; set; }
 
         /// <summary>
         /// The texture of the sprite
@@ -149,7 +149,7 @@ namespace CatchMeUp.Client
         public void PlayAnimation(string name)
         {
             //Makes sure we won't start a new annimation unless it differs from our current animation
-            if (currentAnimation != name && Move == Move.None)
+            if (currentAnimation != name && Direction == Move.None)
             {
                 currentAnimation = name;
                 _frameIndex = 0;

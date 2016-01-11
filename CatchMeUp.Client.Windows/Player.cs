@@ -25,6 +25,11 @@ namespace CatchMeUp.Client
         public string Name { get; private set; }
 
         /// <summary>
+        /// Determines the direction of the current animation
+        /// </summary>
+        public Move Move { get; set; }
+
+        /// <summary>
         /// Determines the name of the player
         /// </summary>
         public IPEndPoint Ip { get; set; }
@@ -112,20 +117,39 @@ namespace CatchMeUp.Client
                 MoveUp();
                 Move = Core.Game.Move.Up;
             }
-            if (keyState.IsKeyDown(Keys.A))
+            else if (Move == Core.Game.Move.Up)
+            {
+                Move = Core.Game.Move.None;
+            }
+
+            else if (keyState.IsKeyDown(Keys.A))
             {
                 MoveLeft();
                 Move = Core.Game.Move.Left;
             }
-            if (keyState.IsKeyDown(Keys.S))
+            else if (Move == Core.Game.Move.Left)
+            {
+                Move = Core.Game.Move.None;
+            }
+
+            else if (keyState.IsKeyDown(Keys.S))
             {
                 MoveDown();
                 Move = Core.Game.Move.Down;
             }
-            if (keyState.IsKeyDown(Keys.D))
+            else if (Move == Core.Game.Move.Down)
+            {
+                Move = Core.Game.Move.None;
+            }
+
+            else if (keyState.IsKeyDown(Keys.D))
             {
                 MoveRight();
                 Move = Core.Game.Move.Right;
+            }
+            else if (Move == Core.Game.Move.Right)
+            {
+                Move = Core.Game.Move.None;
             }
 
             StopMove();
@@ -135,26 +159,22 @@ namespace CatchMeUp.Client
         {
             if (Move == Core.Game.Move.Up)
             {
-                Move = Move.None;
                 MoveUp();
             }
             if (Move == Core.Game.Move.Left)
             {
-                Move = Move.None;
                 MoveLeft();
             }
             if (Move == Core.Game.Move.Down)
             {
-                Move = Move.None;
                 MoveDown();
             }
             if (Move == Core.Game.Move.Right)
             {
-                Move = Move.None;
                 MoveRight();
             }
 
-            //StopMove();
+            StopMove();
         }
 
         private void MoveUp()
@@ -162,7 +182,7 @@ namespace CatchMeUp.Client
             //Move char Up
             sDirection += new Vector2(0, -1);
             PlayAnimation("Up");
-            Move = Core.Game.Move.Up;
+            Direction = Core.Game.Move.Up;
         }
 
         private void MoveLeft()
@@ -170,7 +190,7 @@ namespace CatchMeUp.Client
             //Move char Left
             sDirection += new Vector2(-1, 0);
             PlayAnimation("Left");
-            Move = Core.Game.Move.Left;
+            Direction = Core.Game.Move.Left;
         }
 
         private void MoveDown()
@@ -178,7 +198,7 @@ namespace CatchMeUp.Client
             //Move char Down
             sDirection += new Vector2(0, 1);
             PlayAnimation("Down");
-            Move = Core.Game.Move.Down;
+            Direction = Core.Game.Move.Down;
         }
 
         private void MoveRight()
@@ -186,7 +206,7 @@ namespace CatchMeUp.Client
             //Move char Right
             sDirection += new Vector2(1, 0);
             PlayAnimation("Right");
-            Move = Core.Game.Move.Right;
+            Direction = Core.Game.Move.Right;
         }
 
         private void StopMove()
@@ -208,7 +228,7 @@ namespace CatchMeUp.Client
                 PlayAnimation("IdleDown");
             }
 
-            Move = Move.None;
+            Direction = Move.None;
         }
 
         /// <summary>

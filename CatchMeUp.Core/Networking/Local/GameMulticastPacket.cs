@@ -17,5 +17,10 @@ namespace CatchMeUp.Core.Networking.Local
 
         public int PosX { get; set; }
         public int PosY { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("{0} - {1}", PlayerName, Move);
+        }
     }
 }
