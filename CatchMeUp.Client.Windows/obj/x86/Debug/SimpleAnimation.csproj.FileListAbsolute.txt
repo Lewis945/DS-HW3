@@ -1,0 +1,32 @@
+C:\Users\Kenneth\Desktop\SimpleAnimation\SimpleAnimation\bin\WindowsGL\Debug\SimpleAnimation.exe
+C:\Users\Kenneth\Desktop\SimpleAnimation\SimpleAnimation\bin\WindowsGL\Debug\SimpleAnimation.pdb
+C:\Users\Kenneth\Desktop\SimpleAnimation\SimpleAnimation\bin\WindowsGL\Debug\Lidgren.Network.dll
+C:\Users\Kenneth\Desktop\SimpleAnimation\SimpleAnimation\bin\WindowsGL\Debug\MonoGame.Framework.dll
+C:\Users\Kenneth\Desktop\SimpleAnimation\SimpleAnimation\bin\WindowsGL\Debug\OpenTK.dll
+C:\Users\Kenneth\Desktop\SimpleAnimation\SimpleAnimation\bin\WindowsGL\Debug\Tao.Sdl.dll
+C:\Users\Kenneth\Desktop\SimpleAnimation\SimpleAnimation\obj\x86\Debug\SimpleAnimation.csprojResolveAssemblyReference.cache
+C:\Users\Kenneth\Desktop\SimpleAnimation\SimpleAnimation\obj\x86\Debug\SimpleAnimation.exe
+C:\Users\Kenneth\Desktop\SimpleAnimation\SimpleAnimation\obj\x86\Debug\SimpleAnimation.pdb
+C:\Users\Kenneth\Desktop\SimpleAnimation\SimpleAnimation\bin\WindowsGL\Debug\Content\playerSheet.png
+C:\Users\Kenneth\Desktop\AdvancedAnimation\SimpleAnimation\obj\x86\Debug\SimpleAnimation.exe
+C:\Users\Kenneth\Desktop\AdvancedAnimation\SimpleAnimation\obj\x86\Debug\SimpleAnimation.pdb
+C:\Users\Lewis\Desktop\Advanced animation\AdvancedAnimation\SimpleAnimation\obj\x86\Debug\SimpleAnimation.exe
+C:\Users\Lewis\Desktop\Advanced animation\AdvancedAnimation\SimpleAnimation\obj\x86\Debug\SimpleAnimation.pdb
+C:\Users\Lewis\Desktop\Advanced animation\AdvancedAnimation\SimpleAnimation\bin\WindowsGL\Debug\Content\playerSheet.png
+C:\Users\Lewis\Desktop\Advanced animation\AdvancedAnimation\SimpleAnimation\bin\WindowsGL\Debug\SimpleAnimation.exe
+C:\Users\Lewis\Desktop\Advanced animation\AdvancedAnimation\SimpleAnimation\bin\WindowsGL\Debug\SimpleAnimation.pdb
+C:\Users\Lewis\Desktop\Advanced animation\AdvancedAnimation\SimpleAnimation\obj\x86\Debug\SimpleAnimation.csprojResolveAssemblyReference.cache
+C:\Users\Lewis\Desktop\Advanced animation\AdvancedAnimation\SimpleAnimation\bin\WindowsGL\Debug\Lidgren.Network.dll
+C:\Users\Lewis\Desktop\Advanced animation\AdvancedAnimation\SimpleAnimation\bin\WindowsGL\Debug\MonoGame.Framework.dll
+C:\Users\Lewis\Desktop\Advanced animation\AdvancedAnimation\SimpleAnimation\bin\WindowsGL\Debug\OpenTK.dll
+C:\Users\Lewis\Desktop\Advanced animation\AdvancedAnimation\SimpleAnimation\bin\WindowsGL\Debug\Tao.Sdl.dll
+E:\Projects 2\Advanced animation\AdvancedAnimation\SimpleAnimation\obj\x86\Debug\SimpleAnimation.exe
+E:\Projects 2\Advanced animation\AdvancedAnimation\SimpleAnimation\obj\x86\Debug\SimpleAnimation.pdb
+E:\Projects 2\Advanced animation\AdvancedAnimation\SimpleAnimation\bin\WindowsGL\Debug\Content\playerSheet.png
+E:\Projects 2\Advanced animation\AdvancedAnimation\SimpleAnimation\bin\WindowsGL\Debug\SimpleAnimation.exe
+E:\Projects 2\Advanced animation\AdvancedAnimation\SimpleAnimation\bin\WindowsGL\Debug\SimpleAnimation.pdb
+E:\Projects 2\Advanced animation\AdvancedAnimation\SimpleAnimation\obj\x86\Debug\SimpleAnimation.csprojResolveAssemblyReference.cache
+E:\Projects 2\Advanced animation\AdvancedAnimation\SimpleAnimation\bin\WindowsGL\Debug\OpenTK.dll
+E:\Projects 2\Advanced animation\AdvancedAnimation\SimpleAnimation\bin\WindowsGL\Debug\Tao.Sdl.dll
+E:\Projects 2\Catch me up\CatchMeUp.Client.Windows\obj\x86\Debug\SimpleAnimation.exe
+E:\Projects 2\Catch me up\CatchMeUp.Client.Windows\obj\x86\Debug\SimpleAnimation.pdb
