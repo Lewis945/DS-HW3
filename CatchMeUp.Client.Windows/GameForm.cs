@@ -136,16 +136,16 @@ namespace CatchMeUp.Client
                             //    player.Postion = new Vector2(p.PosX, p.PosY);
                             //}
                             player.Postion = new Vector2(p.PosX, p.PosY);
-                        }
 
-                        if (p.IsDead)
-                        {
-                            System.Diagnostics.Debug.WriteLine("Receive dead");
-                            _engine.RemovePlayer(player);
-                        }
-                        else
-                        {
-                            _engine.MovePlayer(player);
+                            if (p.IsDead)
+                            {
+                                System.Diagnostics.Debug.WriteLine("Receive dead");
+                                _engine.RemovePlayer(player);
+                            }
+                            else
+                            {
+                                _engine.MovePlayer(player);
+                            }
                         }
 
                         //System.Diagnostics.Debug.WriteLine("Received " + p.PlayerName + "-" + p.Move);

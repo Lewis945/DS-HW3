@@ -1,18 +1,11 @@
 ﻿using CatchMeUp.Client;
 using CatchMeUp.Core.Game;
-using CatchMeUp.Core.Networking.DHT;
 using CatchMeUp.Core.Networking.Local;
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CatchMeUp.WinForms
