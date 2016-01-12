@@ -9,6 +9,7 @@ using CatchMeUp.Core.Game;
 using CatchMeUp.Core.Networking.Local;
 using System.Linq;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace CatchMeUp.Client
 {
@@ -113,6 +114,8 @@ namespace CatchMeUp.Client
                         {
                             player = new Player(p.PlayerName, p.Team, new Vector2(p.PosX, p.PosY));
                             player.Texture = p.Team == Team.Hunter ? _textureHunterPlayerSheet : _textureHuntedPlayerSheet;
+                            player.ViewPortWidth = _engine.Width;
+                            player.ViewPortHeight = _engine.Height;
                             _players.Add(player);
                             _engine.AddPlayer(player);
                         }
@@ -245,8 +248,11 @@ namespace CatchMeUp.Client
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == Microsoft.Xna.Framework.Input.ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape))
+            {
                 Exit();
+                Application.Exit();
+            }
 
             // TODO: Add your update logic here
 

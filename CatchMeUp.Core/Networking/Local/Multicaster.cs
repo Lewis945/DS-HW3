@@ -9,7 +9,7 @@ namespace CatchMeUp.Core.Networking.Local
     public class Multicaster
     {
         public static int Port { get; set; } = 26294;
-        public static int Time { get; set; } = 200;
+        public static int Time { get; set; } = 100;
 
         public static bool Send { get; set; } = true;
         //public static bool SendResponse { get; set; } = true;
