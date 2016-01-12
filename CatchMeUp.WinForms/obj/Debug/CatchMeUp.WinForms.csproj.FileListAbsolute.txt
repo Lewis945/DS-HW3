@@ -43,3 +43,4 @@ C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.WinForms\obj\Debug\CatchMeUp.WinFor
 C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.WinForms\obj\Debug\CatchMeUp.WinForms.Home.resources
 C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.WinForms\obj\Debug\CatchMeUp.WinForms.Properties.Resources.resources
 C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.WinForms\obj\Debug\CatchMeUp.WinForms.csproj.GenerateResource.Cache
+C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.WinForms\bin\Debug\Content\Font.xnb

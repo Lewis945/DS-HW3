@@ -15,8 +15,12 @@ namespace CatchMeUp.Core.Networking.Local
         public Team Team { get; set; }
         public Move Move { get; set; }
 
-        public int PosX { get; set; }
-        public int PosY { get; set; }
+        public int Score { get; set; }
+
+        public bool IsDead { get; set; }
+
+        public float PosX { get; set; }
+        public float PosY { get; set; }
 
         public override string ToString()
         {

@@ -21,14 +21,13 @@ namespace CatchMeUp.Core.Networking.Local
         public int FieldWidth { get; set; }
         public int FieldHeight { get; set; }
 
-        public int MaxPlayersNumber { get; set; }
         public int JoinedPlayersNumber { get; set; }
 
         public string Ip { get; set; }
 
         public override string ToString()
         {
-            return string.Format("{0} {1} {2}*{3} {4}/{5}", SessionName, SessionCreator, FieldWidth, FieldHeight, JoinedPlayersNumber, MaxPlayersNumber);
+            return string.Format("{0} {1} {2}*{3} {4}/Unlim", SessionName, SessionCreator, FieldWidth, FieldHeight, JoinedPlayersNumber);
         }
     }
 }

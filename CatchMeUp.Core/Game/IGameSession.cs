@@ -14,7 +14,7 @@ namespace CatchMeUp.Core.Game
         string SessionCreator { get; set; }
 
         int JoinedPlayersNumber { get; set; }
-        int MaxPlayersNumber { get; set; }
+
         int FieldHeight { get; set; }
         int FieldWidth { get; set; }
     }

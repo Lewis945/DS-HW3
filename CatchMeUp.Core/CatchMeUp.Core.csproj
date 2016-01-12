@@ -35,6 +35,18 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Lidgren.Network, Version=3.5.0.1046, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CatchMeUp.Client.Windows\bin\WindowsGL\Debug\Lidgren.Network.dll</HintPath>
+    </Reference>
+    <Reference Include="MonoGame.Framework, Version=3.5.0.1046, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CatchMeUp.Client.Windows\bin\WindowsGL\Debug\MonoGame.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CatchMeUp.Client.Windows\bin\WindowsGL\Debug\OpenTK.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net" />
@@ -43,11 +55,19 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Tao.Sdl, Version=1.2.13.0, Culture=neutral, PublicKeyToken=9c7a200e36c0094e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\CatchMeUp.Client.Windows\bin\WindowsGL\Debug\Tao.Sdl.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Game\AnimatedSprite.cs" />
+    <Compile Include="Game\Engine.cs" />
     <Compile Include="Game\GameSession.cs" />
+    <Compile Include="Game\GameSettings.cs" />
     <Compile Include="Game\IGameSession.cs" />
     <Compile Include="Game\Move.cs" />
+    <Compile Include="Game\Player.cs" />
     <Compile Include="Game\Team.cs" />
     <Compile Include="Networking\DHT\Client.cs" />
     <Compile Include="Networking\DHT\Packet.cs" />
@@ -58,6 +78,7 @@
     <Compile Include="Networking\Local\LobbyBroadcastPacket.cs" />
     <Compile Include="Networking\Local\GameMulticastPacket.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sharp\Array.cs" />
     <Compile Include="Sharp\BytePacket.cs" />
     <Compile Include="Sharp\IBytePacket.cs" />
     <Compile Include="Sharp\Pair.cs" />

@@ -18,7 +18,7 @@ namespace CatchMeUp.Client
         [STAThread]
         static void Main()
         {
-            using (var game = new GameForm(new Core.Game.GameSession(), new Core.Networking.Local.GameMulticastPacket()))
+            using (var game = new GameForm(new Core.Game.GameSession(), new Core.Game.GameSettings()))
                 game.Run();
         }
     }

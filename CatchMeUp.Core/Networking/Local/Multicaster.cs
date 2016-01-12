@@ -1,208 +1,155 @@
 ﻿using CatchMeUp.Core.Sharp;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace CatchMeUp.Core.Networking.Local
 {
     public class Multicaster
     {
         public static int Port { get; set; } = 26294;
-        public static int Time { get; set; } = 5000;
+        public static int Time { get; set; } = 200;
 
         public static bool Send { get; set; } = true;
+        //public static bool SendResponse { get; set; } = true;
         public static bool Listen { get; set; } = true;
 
-        public static bool LocalComputer { get; set; } = true;
+        //public static void MulticastGameSession<T>(string ip, Func<T> sendAction)
+        //    where T : IBytePacket
+        //{
+        //    var udpclient = new UdpClient();
+
+        //    var multicastaddress = IPAddress.Parse(ip);
+        //    udpclient.JoinMulticastGroup(multicastaddress);
+        //    var remoteEp = new IPEndPoint(multicastaddress, Port);
+
+        //    var threadMulticast = new Thread(() =>
+        //    {
+        //        try
+        //        {
+        //            while (Send)
+        //            {
+        //                var packet = sendAction();
+
+        //                int length;
+        //                udpclient.Send(packet.Pack(out length), length, remoteEp);
+
+        //                Thread.Sleep(Time);
+
+        //                //if ((packet as GameMulticastPacket).Move != 0)
+        //                //    Debug.WriteLine("Send " + packet.ToString());
+        //            }
+
+        //            udpclient.Close();
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //        }
+        //    });
+        //    threadMulticast.Start();
+        //}
 
         public static void MulticastGameSession<T>(string ip, Func<T> sendAction)
             where T : IBytePacket
         {
-            //var udpclient = new UdpClient();
+            var client = new UdpClient();
+            client.ExclusiveAddressUse = false;
 
-            //var multicastaddress = IPAddress.Parse(ip);
-            //udpclient.JoinMulticastGroup(multicastaddress);
-            //var remoteEp = new IPEndPoint(multicastaddress, Port);
+            var localEp = new IPEndPoint(IPAddress.Any, Port);
 
-            //var threadMulticast = new Thread(() =>
-            //{
-            //    while (Send)
-            //    {
-            //        var packet = sendAction();
+            client.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+            client.ExclusiveAddressUse = false;
 
-            //        int length;
-            //        udpclient.Send(packet.Pack(out length), length, remoteEp);
-            //    }
-            //});
+            client.Client.Bind(localEp);
 
-            //threadMulticast.Start();
+            var multicastaddress = IPAddress.Parse(ip);
+            client.JoinMulticastGroup(multicastaddress);
 
-            var udpclient = new UdpClient();
-
-            var multicastaddress = IPAddress.Parse("239.0.0.222");
-            udpclient.JoinMulticastGroup(multicastaddress);
-            var remoteEp = new IPEndPoint(multicastaddress, 2222);
-
-            var threadMulticast = new Thread(() =>
+            var threadSend = new Thread(() =>
             {
-                while (Send)
+                var remoteEp = new IPEndPoint(multicastaddress, Port);
+
+                try
                 {
-                    var packet = sendAction();
+                    while (Send)
+                    {
+                        var responseData = sendAction();
+                        int length;
+                        client.Send(responseData.Pack(out length), length, remoteEp);
 
-                    int length;
-                    udpclient.Send(packet.Pack(out length), length, remoteEp);
-
-                    Thread.Sleep(100);
-
-                    //if ((packet as GameMulticastPacket).Move != 0)
-                    //    Debug.WriteLine("Send " + packet.ToString());
+                        Thread.Sleep(Time);
+                    }
+                }
+                catch (Exception ex)
+                {
                 }
             });
-            threadMulticast.Start();
 
-            //UdpClient udpclient = new UdpClient();
-
-            //IPAddress multicastaddress = IPAddress.Parse("239.0.0.222");
-            //udpclient.JoinMulticastGroup(multicastaddress);
-            //IPEndPoint remoteep = new IPEndPoint(multicastaddress, 2222);
-
-            //Byte[] buffer = null;
-
-            //var threadMulticast = new Thread(() =>
-            //{
-            //    while (true)
-            //    {
-            //        buffer = Encoding.Unicode.GetBytes("222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222");
-            //        udpclient.Send(buffer, buffer.Length, remoteep);
-
-            //        Thread.Sleep(500);
-            //    }
-            //});
-            //threadMulticast.Start();
+            threadSend.Start();
         }
 
-        public static void ListenToGameSession<T>(string ip, Action<T, IPEndPoint> callback, Func<T> sendAction)
+        //public static void ListenToGameSession<T>(string ip, Action<T, IPEndPoint> callback, Func<T> sendAction)
+        //    where T : IBytePacket
+        public static void ListenToGameSession<T>(string ip, Action<T, IPEndPoint> callback)
             where T : IBytePacket
         {
-            //var localEp = new IPEndPoint(IPAddress.Any, Port);
+            var client = new UdpClient();
+            client.ExclusiveAddressUse = false;
 
-            //var udpclient = new UdpClient();
-            //if (LocalComputer)
-            //{
-            //    udpclient.ExclusiveAddressUse = false;
-            //    udpclient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-            //    udpclient.ExclusiveAddressUse = false;
-            //}
-            //udpclient.Client.Bind(localEp);
+            var localEp = new IPEndPoint(IPAddress.Any, Port);
 
-            //var multicastaddress = IPAddress.Parse(ip);
-            //udpclient.JoinMulticastGroup(multicastaddress);
+            client.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+            client.ExclusiveAddressUse = false;
 
-            //var threadListen = new Thread(() =>
-            //{
-            //    while (Listen)
-            //    {
-            //        var sender = new IPEndPoint(IPAddress.Any, Port);
-            //        var data = udpclient.Receive(ref sender);
-            //        var response = BytePacket<T>.UnPack(data);
-            //        callback(response, sender);
-            //    }
-            //});
+            client.Client.Bind(localEp);
 
-            //threadListen.Start();
+            var multicastaddress = IPAddress.Parse(ip);
+            client.JoinMulticastGroup(multicastaddress);
+
+            var threadListen = new Thread(() =>
+            {
+                try
+                {
+                    while (Listen)
+                    {
+                        var data = client.Receive(ref localEp);
+                        var response = BytePacket<T>.UnPack(data);
+                        callback(response, localEp);
+
+                        //if ((response as GameMulticastPacket).Move != 0)
+                        //    Debug.WriteLine("Received " + response.ToString());
+                    }
+
+                    client.Close();
+                }
+                catch (Exception ex)
+                {
+                }
+            });
+            threadListen.Start();
 
             //var threadSend = new Thread(() =>
             //{
             //    var remoteEp = new IPEndPoint(multicastaddress, Port);
 
-            //    while (Send)
+            //    try
             //    {
-            //        var responseData = sendAction();
-            //        int length;
-            //        udpclient.Send(responseData.Pack(out length), length, remoteEp);
+            //        while (SendResponse)
+            //        {
+            //            var responseData = sendAction();
+            //            int length;
+            //            client.Send(responseData.Pack(out length), length, remoteEp);
+
+            //            Thread.Sleep(Time);
+            //        }
+            //    }
+            //    catch (Exception ex)
+            //    {
             //    }
             //});
 
             //threadSend.Start();
-
-            var client = new UdpClient();
-
-            if (LocalComputer)
-            {
-                client.ExclusiveAddressUse = false;
-            }
-            var localEp = new IPEndPoint(IPAddress.Any, 2222);
-
-            if (LocalComputer)
-            {
-                client.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-                client.ExclusiveAddressUse = false;
-            }
-
-            client.Client.Bind(localEp);
-
-            var multicastaddress = IPAddress.Parse("239.0.0.222");
-            client.JoinMulticastGroup(multicastaddress);
-
-            var threadListen = new Thread(() =>
-            {
-                while (true)
-                {
-                    var data = client.Receive(ref localEp);
-                    var response = BytePacket<T>.UnPack(data);
-                    callback(response, localEp);
-
-                    //if ((response as GameMulticastPacket).Move != 0)
-                    //    Debug.WriteLine("Received " + response.ToString());
-                }
-            });
-            threadListen.Start();
-
-            var threadSend = new Thread(() =>
-            {
-                var remoteEp = new IPEndPoint(multicastaddress, 2222);
-
-                while (Send)
-                {
-                    var responseData = sendAction();
-                    int length;
-                    client.Send(responseData.Pack(out length), length, remoteEp);
-
-                    Thread.Sleep(100);
-                }
-            });
-
-            threadSend.Start();
-
-            //UdpClient client = new UdpClient();
-
-            //client.ExclusiveAddressUse = false;
-            //IPEndPoint localEp = new IPEndPoint(IPAddress.Any, 2222);
-
-            //client.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-            //client.ExclusiveAddressUse = false;
-
-            //client.Client.Bind(localEp);
-
-            //IPAddress multicastaddress = IPAddress.Parse("239.0.0.222");
-            //client.JoinMulticastGroup(multicastaddress);
-
-            //var threadListen = new Thread(() =>
-            //{
-            //    while (true)
-            //    {
-            //        Byte[] data = client.Receive(ref localEp);
-            //        string strData = Encoding.Unicode.GetString(data);
-            //        Console.WriteLine(strData);
-            //    }
-            //});
-            //threadListen.Start();
         }
     }
 }

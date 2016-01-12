@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CatchMeUp.Core.Game
 {
@@ -11,17 +6,16 @@ namespace CatchMeUp.Core.Game
     {
         public Guid Id { get; set; }
 
+        public bool IsNew { get; set; }
+
         public string SessionName { get; set; }
         public string SessionCreator { get; set; }
 
         public int JoinedPlayersNumber { get; set; }
-        public int MaxPlayersNumber { get; set; }
         public int FieldHeight { get; set; }
         public int FieldWidth { get; set; }
 
-        public IPEndPoint CreatorIp { get; set; }
-
-        public string Ip{ get; set; }
+        public string IP { get; set; }
 
         public DateTime BroadcastReceivedTimeStamp { get; set; }
 

@@ -22,58 +22,139 @@ namespace CatchMeUp.Client
         private Texture2D _textureHuntedPlayerSheet;
         private Texture2D _textureHunterPlayerSheet;
 
+        private SpriteFont _fontSprite;
+        private Vector2 _fontSpritePos;
+
         /// <summary>
-        /// Creates our player
+        /// Stores our player
         /// </summary>
         private Player _player;
 
-        private GameMulticastPacket _packet;
+        /// <summary>
+        /// Stores other player
+        /// </summary>
+        private List<Player> _players;
 
-        private List<Player> _otherPlayers;
+        /// <summary>
+        /// Stores game engine
+        /// </summary>
+        private Engine _engine;
+        private int _cellSize;
+
+        private GameMulticastPacket _packet;
 
         /// <summary>
         /// Game session
         /// </summary>
         private GameSession _session;
 
-        public GameForm(GameSession session, GameMulticastPacket gameMulticastPacket)
+        public GameForm(GameSession session, GameSettings settings)
             : base()
         {
             _graphics = new GraphicsDeviceManager(this);
+
+            _engine = new Engine(session.FieldWidth, session.FieldWidth);
+            _engine.Players = _players = new List<Player>();
+
+            var cords = _engine.GetRandomPosition();
+            while (_engine.HasPlayer((int)cords.X, (int)cords.Y))
+            {
+                cords = _engine.GetRandomPosition();
+            }
+
+            _player = new Player(settings.PlayerName, settings.Team, cords);
+            _player.HandleKeyboard = true;
+            _player.OnKeyPressed += (s, e) => { _engine.MovePlayer(_player); };
+            _player.ViewPortWidth = _engine.Width;
+            _player.ViewPortHeight = _engine.Height;
+            _players.Add(_player);
+            _engine.AddPlayer(_player);
+
+            _engine.CurrentPlayer = _player;
+
+            _cellSize = 50;
+            _graphics.PreferredBackBufferWidth = _engine.Width;
+            _graphics.PreferredBackBufferHeight = _engine.Height;
+
             Content.RootDirectory = "Content";
 
-            //Instantiates our player at the position X = 100, Y = 100;
-            _player = new Player(gameMulticastPacket.PlayerName, gameMulticastPacket.Team, new Vector2(gameMulticastPacket.PosX, gameMulticastPacket.PosY));
-            _player.HandleKeyboard = true;
-
             _session = session;
-            _otherPlayers = new List<Player>();
 
-            _packet = gameMulticastPacket;
+            _packet = new GameMulticastPacket()
+            {
+                PlayerName = settings.PlayerName,
+                Team = settings.Team
+            };
 
-            Multicaster.ListenToGameSession<GameMulticastPacket>(_session.Ip,
+            Multicaster.MulticastGameSession<GameMulticastPacket>(_session.IP, () =>
+            {
+                if (_player.IsDead)
+                {
+                    Multicaster.Send = false;
+                }
+
+                _packet.Move = _player.Move;
+                _packet.IsDead = _player.IsDead;
+                _packet.Score = _player.Score;
+                _packet.PosX = _player.Postion.X;
+                _packet.PosY = _player.Postion.Y;
+
+                return _packet;
+            });
+
+            Multicaster.ListenToGameSession<GameMulticastPacket>(_session.IP,
+                // Listen callback
                 (p, sender) =>
                 {
                     if (_textureHunterPlayerSheet != null && _textureHuntedPlayerSheet != null && !_player.Name.Equals(p.PlayerName))
                     {
-                        var player = _otherPlayers.FirstOrDefault(op => op.Name.Equals(p.PlayerName));
+                        var player = _players.FirstOrDefault(op => op.Name.Equals(p.PlayerName));
                         if (player == null)
                         {
                             player = new Player(p.PlayerName, p.Team, new Vector2(p.PosX, p.PosY));
                             player.Texture = p.Team == Team.Hunter ? _textureHunterPlayerSheet : _textureHuntedPlayerSheet;
-                            player.Ip = sender;
-                            _otherPlayers.Add(player);
+                            _players.Add(player);
+                            _engine.AddPlayer(player);
                         }
 
-                        player.Move = p.Move;
-                    }
-                },
-                () =>
-                {
-                    _packet.Move = _player.Move;
+                        if (!p.IsDead)
+                        {
+                            player.Move = p.Move;
+                            player.IsDead = p.IsDead;
+                            player.Team = p.Team;
 
-                    return _packet;
-                });
+                            if (player.Postion.X != p.PosX && player.Postion.Y != p.PosY)
+                            {
+                                player.Postion = new Vector2(p.PosX, p.PosY);
+                            }
+                            _engine.MovePlayer(player);
+                        }
+                        else
+                        {
+                            _engine.RemovePlayer(player);
+                        }
+
+                        System.Diagnostics.Debug.WriteLine(p.PlayerName + "-" + p.Move);
+                    }
+                }
+                //// Send response
+                //() =>
+                //{
+                //    if (_player.IsDead)
+                //    {
+                //        Multicaster.Send = false;
+                //    }
+
+                //    _packet.Move = _player.Move;
+                //    _packet.Team = _player.Team;
+                //    _packet.IsDead = _player.IsDead;
+                //    _packet.Score = _player.Score;
+                //    _packet.PosX = _player.Postion.X;
+                //    _packet.PosY = _player.Postion.Y;
+
+                //    return _packet;
+                //}
+                );
         }
 
         /// <summary>
@@ -103,29 +184,49 @@ namespace CatchMeUp.Client
             _textureHuntedPlayerSheet = Content.Load<Texture2D>("huntedPlayerSheet");
             _textureHunterPlayerSheet = Content.Load<Texture2D>("hunterPlayerSheet");
 
+            _fontSprite = Content.Load<SpriteFont>("Font");
+            _fontSpritePos = new Vector2(50, 20);
+
             ////Instantiates our player at the position X = 100, Y = 100;
             //_player = new Player(new Vector2(100, 100));
             _player.Texture = _player.Team == Team.Hunter ? _textureHunterPlayerSheet : _textureHuntedPlayerSheet;
 
-            var pr = new Player("Tim", Team.Hunted, new Vector2(100, 100));
-            pr.Texture = _textureHuntedPlayerSheet;
-            _otherPlayers.Add(pr);
+            //var pr = new Player("Tim", Team.Hunted, new Vector2(100, 100));
+            //pr.Texture = _textureHuntedPlayerSheet;
+            //pr.ViewPortWidth = _engine.Width;
+            //pr.ViewPortHeight = _engine.Height;
+            //_players.Add(pr);
+            //_engine.AddPlayer(pr);
 
-            var tr = new Thread(() =>
-            {
-                var rnd = new Random();
-                var move = Move.None;
-                while (true)
-                {
-                    _otherPlayers.FirstOrDefault().Move = move;
+            //var tr = new Thread(() =>
+            //{
+            //    var rnd = new Random();
+            //    var move = Move.None;
+            //    while (!pr.IsDead)
+            //    {
+            //        pr.Move = move;
+            //        _engine.MovePlayer(pr);
 
-                    Thread.Sleep(1000);
+            //        Thread.Sleep(1000);
 
-                    move = (Move)rnd.Next(0, 4);
-                }
-            });
+            //        move = (Move)rnd.Next(0, 4);
+            //    }
+            //});
+            //tr.Start();
 
-            tr.Start();
+            //var tr1 = new Thread(() =>
+            //{
+            //    while (!pr.IsDead)
+            //    {
+            //        if (_engine.GetWindowToMapPosition(_player.Postion.X, _player.Postion.Y).Equals(_engine.GetWindowToMapPosition(pr.Postion.X, pr.Postion.Y)))
+            //        {
+            //            pr.IsDead = true;
+            //        }
+
+            //        Thread.Sleep(100);
+            //    }
+            //});
+            //tr1.Start();
         }
 
         /// <summary>
@@ -149,15 +250,29 @@ namespace CatchMeUp.Client
 
             // TODO: Add your update logic here
 
-            //Updates our players sprite Image
-            _player.Update(gameTime);
-
-            foreach (var item in _otherPlayers)
+            foreach (var item in _players)
             {
                 item.Update(gameTime);
             }
 
             base.Update(gameTime);
+        }
+
+        private void DrawGrid(SpriteBatch spriteBatch)
+        {
+            var texture1px = new Texture2D(GraphicsDevice, 1, 1);
+            texture1px.SetData(new Color[] { Color.White });
+
+            for (float x = 1 - _engine.Cols / 2; x < _engine.Cols / 2; x++)
+            {
+                var rectangle = new Rectangle((int)(_engine.CenterX + x * _cellSize), 0, 1, _engine.Height);
+                spriteBatch.Draw(texture1px, rectangle, Color.Red);
+            }
+            for (float y = 1 - _engine.Rows / 2; y < _engine.Rows / 2; y++)
+            {
+                var rectangle = new Rectangle(0, (int)(_engine.CenterY + y * _cellSize), _engine.Width, 1);
+                spriteBatch.Draw(texture1px, rectangle, Color.Red);
+            }
         }
 
         /// <summary>
@@ -168,18 +283,21 @@ namespace CatchMeUp.Client
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
             _spriteBatch.Begin();
 
-            //Draws our player on the screen
-            _player.Draw(_spriteBatch);
+            DrawGrid(_spriteBatch);
 
-            foreach (var item in _otherPlayers)
+            var output = string.Format("Score: " + _player.Score);
+            var fontOrigin = _fontSprite.MeasureString(output) / 2;
+            _spriteBatch.DrawString(_fontSprite, output, _fontSpritePos, Color.Black, 0, fontOrigin, 1.0f, SpriteEffects.None, 0.5f);
+
+            foreach (var item in _players.Where(p => !p.IsDead).OrderBy(p => p.Postion.Y))
             {
                 item.Draw(_spriteBatch);
             }
 
             _spriteBatch.End();
+
             base.Draw(gameTime);
         }
     }

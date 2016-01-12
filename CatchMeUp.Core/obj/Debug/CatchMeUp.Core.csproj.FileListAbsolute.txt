@@ -12,3 +12,7 @@ C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.Core\bin\Debug\CatchMeUp.Core.pdb
 C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.Core\obj\Debug\CatchMeUp.Core.csprojResolveAssemblyReference.cache
 C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.Core\obj\Debug\CatchMeUp.Core.dll
 C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.Core\obj\Debug\CatchMeUp.Core.pdb
+C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.Core\bin\Debug\MonoGame.Framework.dll
+C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.Core\bin\Debug\OpenTK.dll
+C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.Core\bin\Debug\Tao.Sdl.dll
+C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.Core\bin\Debug\Lidgren.Network.dll

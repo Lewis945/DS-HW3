@@ -24,3 +24,4 @@ C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.Client.Windows\bin\WindowsGL\Debug\
 C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.Client.Windows\obj\x86\Debug\CatchMeUp.Client.csprojResolveAssemblyReference.cache
 C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.Client.Windows\obj\x86\Debug\CatchMeUp.Client.exe
 C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.Client.Windows\obj\x86\Debug\CatchMeUp.Client.pdb
+C:\Users\lewis\Source\Repos\DS-HW3\CatchMeUp.Client.Windows\bin\WindowsGL\Debug\Content\Font.xnb

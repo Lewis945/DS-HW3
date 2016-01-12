@@ -1,17 +1,13 @@
 ﻿using CatchMeUp.Core.Sharp;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace CatchMeUp.Core.Networking.Local
 {
-    public class Broadcaster<T> 
-        where T : IBytePacket
+    public class Broadcaster
     {
         public static int Port { get; set; } = 26194;
         public static int Time { get; set; } = 2000;
@@ -19,14 +15,9 @@ namespace CatchMeUp.Core.Networking.Local
         public static bool Send { get; set; } = true;
         public static bool Listen { get; set; } = true;
 
-        public static bool LocalComputer { get; set; } = true;
-
-        public static T SendPacket { get; set; }
-
-        public static void BroadcastGameSession(T packet)
+        public static void BroadcastGameSession<T>(Func<T> sendAction)
+            where T : IBytePacket
         {
-            SendPacket = packet;
-
             var socketSender = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             socketSender.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, 1);
 
@@ -34,66 +25,62 @@ namespace CatchMeUp.Core.Networking.Local
 
             var threadBroadcast = new Thread(() =>
             {
-                while (Send)
+                try
                 {
-                    try
+                    while (Send)
                     {
-                        socketSender.SendTo(SendPacket.Pack(), broadcastAddress);
+                        var packet = sendAction();
+                        socketSender.SendTo(packet.Pack(), broadcastAddress);
+
+                        Thread.Sleep(Time);
                     }
-                    catch (Exception ex)
-                    {
-                    }
-                    Thread.Sleep(Time);
+
+                    socketSender.Close();
+                }
+                catch (Exception ex)
+                {
                 }
             });
 
             threadBroadcast.Start();
         }
 
-        public static void ListenToGameSessions(Action<T, IPEndPoint> callback)
+        public static void ListenToGameSessions<T>(Action<T, IPEndPoint> callback)
+            where T : IBytePacket
         {
             var localEndPoint = new IPEndPoint(IPAddress.Any, Port);
 
             var socketListener = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-            if (LocalComputer)
-            {
-                socketListener.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-                socketListener.ExclusiveAddressUse = false;
-            }
+            socketListener.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+            socketListener.ExclusiveAddressUse = false;
             socketListener.Bind(localEndPoint);
 
             var threadListen = new Thread(() =>
             {
-                while (Listen)
+                try
                 {
-                    var buffer = new byte[1024];
-                    var data = new List<byte>();
-                    int bytes = 0;
-
-                    var remoteIp = (EndPoint)new IPEndPoint(IPAddress.Any, 0);
-
-                    try
+                    while (Listen)
                     {
+                        var buffer = new byte[1024];
+                        var data = new List<byte>();
+                        int bytes = 0;
+
+                        var remoteIp = (EndPoint)new IPEndPoint(IPAddress.Any, 0);
+
                         do
                         {
                             bytes = socketListener.ReceiveFrom(buffer, ref remoteIp);
                             data.AddRange(buffer);
                         }
                         while (socketListener.Available > 0);
+
+                        var remoteFullIp = remoteIp as IPEndPoint;
+
+                        var response = BytePacket<T>.UnPack(data.ToArray());
+                        callback(response, remoteFullIp);
                     }
-                    catch (Exception ex)
-                    {
-                        break;
-                    }
 
-                    var remoteFullIp = remoteIp as IPEndPoint;
 
-                    var response = BytePacket<T>.UnPack(data.ToArray());
-                    callback(response, remoteFullIp);
-                }
-
-                try
-                {
                     socketListener.Close();
                 }
                 catch (Exception ex)

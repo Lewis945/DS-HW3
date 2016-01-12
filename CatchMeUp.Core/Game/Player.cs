@@ -10,14 +10,11 @@ using System.Linq;
 using System.Net;
 using System.Text;
 
-namespace CatchMeUp.Client
+namespace CatchMeUp.Core.Game
 {
-    class Player : AnimatedSprite
+    public class Player : AnimatedSprite
     {
-        /// <summary>
-        /// Determines the direction of the current animation
-        /// </summary>
-        public Team Team { get; private set; }
+        public Team Team { get; set; }
 
         /// <summary>
         /// Determines the name of the player
@@ -29,8 +26,14 @@ namespace CatchMeUp.Client
         /// </summary>
         public Move Move { get; set; }
 
+        public bool IsDead { get; set; }
+
+        public int Score { get; set; }
+
+        public DateTime TimeStamp { get; set; }
+
+        //private float mySpeed = 200;
         private float mySpeed = 100;
-        //private float mySpeed = 50;
 
         public Texture2D Texture
         {
@@ -41,9 +44,17 @@ namespace CatchMeUp.Client
         public Vector2 Postion
         {
             get { return sPostion; }
+            set { sPostion = value; }
         }
 
         public bool HandleKeyboard { get; set; }
+
+        public event EventHandler OnKeyPressed;
+
+        public int ViewPortWidth { get; set; }
+        public int ViewPortHeight { get; set; }
+
+        public static int Offset { get; set; } = 47;
 
         /// <summary>
         /// The constructor of the Player class
@@ -116,6 +127,7 @@ namespace CatchMeUp.Client
             {
                 MoveUp();
                 Move = Core.Game.Move.Up;
+                OnKeyPressedAction(null);
             }
             else if (Move == Core.Game.Move.Up)
             {
@@ -126,6 +138,7 @@ namespace CatchMeUp.Client
             {
                 MoveLeft();
                 Move = Core.Game.Move.Left;
+                OnKeyPressedAction(null);
             }
             else if (Move == Core.Game.Move.Left)
             {
@@ -136,6 +149,7 @@ namespace CatchMeUp.Client
             {
                 MoveDown();
                 Move = Core.Game.Move.Down;
+                OnKeyPressedAction(null);
             }
             else if (Move == Core.Game.Move.Down)
             {
@@ -146,6 +160,7 @@ namespace CatchMeUp.Client
             {
                 MoveRight();
                 Move = Core.Game.Move.Right;
+                OnKeyPressedAction(null);
             }
             else if (Move == Core.Game.Move.Right)
             {
@@ -180,7 +195,11 @@ namespace CatchMeUp.Client
         private void MoveUp()
         {
             //Move char Up
-            sDirection += new Vector2(0, -1);
+            if (Postion.Y > 2)
+            {
+                sDirection += new Vector2(0, -1);
+            }
+            //sDirection += new Vector2(0, -1);
             PlayAnimation("Up");
             Direction = Core.Game.Move.Up;
         }
@@ -188,7 +207,11 @@ namespace CatchMeUp.Client
         private void MoveLeft()
         {
             //Move char Left
-            sDirection += new Vector2(-1, 0);
+            if (Postion.X > 2)
+            {
+                sDirection += new Vector2(-1, 0);
+            }
+            //sDirection += new Vector2(-1, 0);
             PlayAnimation("Left");
             Direction = Core.Game.Move.Left;
         }
@@ -196,7 +219,11 @@ namespace CatchMeUp.Client
         private void MoveDown()
         {
             //Move char Down
-            sDirection += new Vector2(0, 1);
+            if (Postion.Y < ViewPortHeight - Offset)
+            {
+                sDirection += new Vector2(0, 1);
+            }
+            //sDirection += new Vector2(0, 1);
             PlayAnimation("Down");
             Direction = Core.Game.Move.Down;
         }
@@ -204,7 +231,11 @@ namespace CatchMeUp.Client
         private void MoveRight()
         {
             //Move char Right
-            sDirection += new Vector2(1, 0);
+            if (Postion.X < ViewPortWidth - Offset)
+            {
+                sDirection += new Vector2(1, 0);
+            }
+            //sDirection += new Vector2(1, 0);
             PlayAnimation("Right");
             Direction = Core.Game.Move.Right;
         }
@@ -237,6 +268,15 @@ namespace CatchMeUp.Client
         /// <param name="AnimationName">Name of the ended animation</param>
         public override void AnimationDone(string animation)
         {
+        }
+
+        protected virtual void OnKeyPressedAction(EventArgs e)
+        {
+            EventHandler handler = OnKeyPressed;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
         }
     }
 }

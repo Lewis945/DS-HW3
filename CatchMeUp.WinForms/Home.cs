@@ -32,7 +32,7 @@ namespace CatchMeUp.WinForms
             tmrShow.Tick += (o, e) =>
             {
                 var time = DateTime.Now;
-                var sessionsToRemove = _gameSessions.Where(s => (time - s.BroadcastReceivedTimeStamp).TotalMilliseconds > Broadcaster<LobbyBroadcastPacket>.Time).ToList();
+                var sessionsToRemove = _gameSessions.Where(s => (time - s.BroadcastReceivedTimeStamp).TotalMilliseconds > Broadcaster.Time).ToList();
 
                 foreach (var s in sessionsToRemove)
                 {
@@ -59,9 +59,18 @@ namespace CatchMeUp.WinForms
             };
         }
 
+        private Team GetTeam()
+        {
+            var team = Team.Spectator;
+            if (radioButtonHunted.Checked) { team = Team.Hunted; }
+            else if (radioButtonHunter.Checked) { team = Team.Hunter; }
+
+            return team;
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
-            using (var game = new GameForm(new GameSession(), new GameMulticastPacket()))
+            using (var game = new GameForm(new GameSession(), new GameSettings()))
             {
                 game.Run();
             }
@@ -69,7 +78,7 @@ namespace CatchMeUp.WinForms
 
         private string GetMulticastIp()
         {
-            var takenIps = _gameSessions.Select(s => s.Ip).ToList();
+            var takenIps = _gameSessions.Select(s => s.IP).ToList();
 
             var random = new Random();
             var firstNumber = random.Next(225, 238);
@@ -95,33 +104,21 @@ namespace CatchMeUp.WinForms
         {
             var packet = new LobbyBroadcastPacket();
             packet.Id = Guid.NewGuid();
-            packet.SessionName = !string.IsNullOrWhiteSpace(textBoxSessionName.Text) ? textBoxSessionName.Text : "New game";
-            packet.SessionCreator = "Jonny" + packet.SessionName;
-            packet.JoinedPlayersNumber = 0;
-            packet.MaxPlayersNumber = 20;
-            packet.FieldHeight = 10;
-            packet.FieldWidth = 10;
+            packet.SessionName = textBoxSessionName.Text;
+            packet.SessionCreator = textBoxPlayerName.Text;
+            packet.FieldHeight = Convert.ToInt32(textBoxFieldHeight.Text);
+            packet.FieldWidth = Convert.ToInt32(textBoxFieldWIdth.Text);
             packet.Ip = GetMulticastIp();
 
-            Broadcaster<LobbyBroadcastPacket>.BroadcastGameSession(packet);
+            Broadcaster.BroadcastGameSession<LobbyBroadcastPacket>(() => { return packet; });
 
             var gameSession = AddLobbyGameSession(packet);
 
-            buttonListenBroadcast_Click(sender, e);
-
-            var random = new Random();
-            var multicastPacket = new GameMulticastPacket()
+            using (var game = new GameForm(gameSession, new GameSettings
             {
-                PlayerName = "Jonny",
-                Team = Team.Hunter,
-                Move = Core.Game.Move.None,
-                PosX = random.Next(0, 600),
-                PosY = random.Next(0, 400)
-            };
-
-            Multicaster.MulticastGameSession<GameMulticastPacket>(packet.Ip, () => { return multicastPacket; });
-
-            using (var game = new GameForm(gameSession, multicastPacket))
+                PlayerName = textBoxPlayerName.Text,
+                Team = GetTeam()
+            }))
             {
                 game.Run();
             }
@@ -139,11 +136,9 @@ namespace CatchMeUp.WinForms
                     SessionName = packet.SessionName,
                     SessionCreator = packet.SessionCreator,
                     JoinedPlayersNumber = packet.JoinedPlayersNumber,
-                    MaxPlayersNumber = packet.MaxPlayersNumber,
                     FieldHeight = packet.FieldHeight,
                     FieldWidth = packet.FieldWidth,
-                    CreatorIp = ip,
-                    Ip = packet.Ip,
+                    IP = packet.Ip,
                     BroadcastReceivedTimeStamp = DateTime.Now
                 };
                 lock (_synch) { _gameSessions.Add(gameSession); }
@@ -175,7 +170,7 @@ namespace CatchMeUp.WinForms
 
         private void buttonListenBroadcast_Click(object sender, EventArgs e)
         {
-            Broadcaster<LobbyBroadcastPacket>.ListenToGameSessions((p, ip) =>
+            Broadcaster.ListenToGameSessions<LobbyBroadcastPacket>((p, ip) =>
             {
                 if (!IsDisposed)
                 {
@@ -197,18 +192,24 @@ namespace CatchMeUp.WinForms
                 if (gameSession != null)
                 {
                     var random = new Random();
-                    using (var game = new GameForm(gameSession, new GameMulticastPacket()
-                    {
-                        PlayerName = "Mark",
-                        Team = Team.Hunted,
-                        PosX = random.Next(0, 600),
-                        PosY = random.Next(0, 400)
-                    }))
+                    using (var game = new GameForm(gameSession, new GameSettings { PlayerName = textBoxPlayerName.Text, Team = GetTeam() }))
                     {
                         game.Run();
                     }
                 }
             }
+        }
+
+        private void buttonStopBroadcast_Click(object sender, EventArgs e)
+        {
+            Broadcaster.Send = false;
+            Broadcaster.Listen = false;
+        }
+
+        private void buttonStopMulticast_Click(object sender, EventArgs e)
+        {
+            Multicaster.Send = false;
+            Multicaster.Listen = false;
         }
     }
 }

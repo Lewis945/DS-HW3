@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace CatchMeUp.Core.Game
 {
-    public enum Team
+    public class GameSettings
     {
-        Spectator,
-        Hunter,
-        Hunted
+        public string PlayerName { get; set; }
+        public Team Team { get; set; }
     }
 }
