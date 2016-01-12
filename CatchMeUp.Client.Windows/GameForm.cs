@@ -18,6 +18,9 @@ namespace CatchMeUp.Client
     /// </summary>
     public class GameForm : Game
     {
+        private object _synchDraw = new object();
+        private object _synchPlayer = new object();
+
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         private Texture2D _textureHuntedPlayerSheet;
@@ -92,6 +95,7 @@ namespace CatchMeUp.Client
                 if (_player.IsDead)
                 {
                     Multicaster.Send = false;
+                    System.Diagnostics.Debug.WriteLine("Send dead");
                 }
 
                 _packet.Move = _player.Move;
@@ -100,11 +104,12 @@ namespace CatchMeUp.Client
                 _packet.PosX = _player.Postion.X;
                 _packet.PosY = _player.Postion.Y;
 
+                //System.Diagnostics.Debug.WriteLine("Send " + _player.Name + "-" + _player.Move);
+
                 return _packet;
             });
 
             Multicaster.ListenToGameSession<GameMulticastPacket>(_session.IP,
-                // Listen callback
                 (p, sender) =>
                 {
                     if (_textureHunterPlayerSheet != null && _textureHuntedPlayerSheet != null && !_player.Name.Equals(p.PlayerName))
@@ -120,44 +125,32 @@ namespace CatchMeUp.Client
                             _engine.AddPlayer(player);
                         }
 
-                        if (!p.IsDead)
+                        lock (_synchPlayer)
                         {
                             player.Move = p.Move;
                             player.IsDead = p.IsDead;
                             player.Team = p.Team;
 
-                            if (player.Postion.X != p.PosX && player.Postion.Y != p.PosY)
-                            {
-                                player.Postion = new Vector2(p.PosX, p.PosY);
-                            }
-                            _engine.MovePlayer(player);
+                            //if (player.Postion.X != p.PosX && player.Postion.Y != p.PosY)
+                            //{
+                            //    player.Postion = new Vector2(p.PosX, p.PosY);
+                            //}
+                            player.Postion = new Vector2(p.PosX, p.PosY);
+                        }
+
+                        if (p.IsDead)
+                        {
+                            System.Diagnostics.Debug.WriteLine("Receive dead");
+                            _engine.RemovePlayer(player);
                         }
                         else
                         {
-                            _engine.RemovePlayer(player);
+                            _engine.MovePlayer(player);
                         }
 
-                        System.Diagnostics.Debug.WriteLine(p.PlayerName + "-" + p.Move);
+                        //System.Diagnostics.Debug.WriteLine("Received " + p.PlayerName + "-" + p.Move);
                     }
-                }
-                //// Send response
-                //() =>
-                //{
-                //    if (_player.IsDead)
-                //    {
-                //        Multicaster.Send = false;
-                //    }
-
-                //    _packet.Move = _player.Move;
-                //    _packet.Team = _player.Team;
-                //    _packet.IsDead = _player.IsDead;
-                //    _packet.Score = _player.Score;
-                //    _packet.PosX = _player.Postion.X;
-                //    _packet.PosY = _player.Postion.Y;
-
-                //    return _packet;
-                //}
-                );
+                });
         }
 
         /// <summary>
@@ -193,43 +186,6 @@ namespace CatchMeUp.Client
             ////Instantiates our player at the position X = 100, Y = 100;
             //_player = new Player(new Vector2(100, 100));
             _player.Texture = _player.Team == Team.Hunter ? _textureHunterPlayerSheet : _textureHuntedPlayerSheet;
-
-            //var pr = new Player("Tim", Team.Hunted, new Vector2(100, 100));
-            //pr.Texture = _textureHuntedPlayerSheet;
-            //pr.ViewPortWidth = _engine.Width;
-            //pr.ViewPortHeight = _engine.Height;
-            //_players.Add(pr);
-            //_engine.AddPlayer(pr);
-
-            //var tr = new Thread(() =>
-            //{
-            //    var rnd = new Random();
-            //    var move = Move.None;
-            //    while (!pr.IsDead)
-            //    {
-            //        pr.Move = move;
-            //        _engine.MovePlayer(pr);
-
-            //        Thread.Sleep(1000);
-
-            //        move = (Move)rnd.Next(0, 4);
-            //    }
-            //});
-            //tr.Start();
-
-            //var tr1 = new Thread(() =>
-            //{
-            //    while (!pr.IsDead)
-            //    {
-            //        if (_engine.GetWindowToMapPosition(_player.Postion.X, _player.Postion.Y).Equals(_engine.GetWindowToMapPosition(pr.Postion.X, pr.Postion.Y)))
-            //        {
-            //            pr.IsDead = true;
-            //        }
-
-            //        Thread.Sleep(100);
-            //    }
-            //});
-            //tr1.Start();
         }
 
         /// <summary>
@@ -287,24 +243,27 @@ namespace CatchMeUp.Client
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            _spriteBatch.Begin();
-
-            DrawGrid(_spriteBatch);
-
-            var output = string.Format("Score: " + _player.Score);
-            var fontOrigin = _fontSprite.MeasureString(output) / 2;
-            _spriteBatch.DrawString(_fontSprite, output, _fontSpritePos, Color.Black, 0, fontOrigin, 1.0f, SpriteEffects.None, 0.5f);
-
-            foreach (var item in _players.Where(p => !p.IsDead).OrderBy(p => p.Postion.Y))
+            lock (_synchDraw)
             {
-                item.Draw(_spriteBatch);
+                GraphicsDevice.Clear(Color.CornflowerBlue);
+
+                _spriteBatch.Begin();
+
+                DrawGrid(_spriteBatch);
+
+                var output = string.Format("Score: " + _player.Score);
+                var fontOrigin = _fontSprite.MeasureString(output) / 2;
+                _spriteBatch.DrawString(_fontSprite, output, _fontSpritePos, Color.Black, 0, fontOrigin, 1.0f, SpriteEffects.None, 0.5f);
+
+                foreach (var item in _players.Where(p => !p.IsDead).OrderBy(p => p.Postion.Y))
+                {
+                    item.Draw(_spriteBatch);
+                }
+
+                _spriteBatch.End();
+
+                base.Draw(gameTime);
             }
-
-            _spriteBatch.End();
-
-            base.Draw(gameTime);
         }
     }
 }

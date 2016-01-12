@@ -91,7 +91,7 @@ namespace CatchMeUp.Core.Game
         /// Adds an animation to the AnimatedSprite
         /// </summary>
         public void AddAnimation(int frames, int yPos, int xStartFrame, string name, int width, int height, Vector2 offset)
-        {   
+        {
 
             //Creates an array of rectangles which will be used when playing an animation
             Rectangle[] Rectangles = new Rectangle[frames];
@@ -110,18 +110,18 @@ namespace CatchMeUp.Core.Game
         /// </summary>
         /// <param name="GameTime">GameTime</param>
         public virtual void Update(GameTime gameTime)
-        {   
+        {
             //Adds time that has elapsed since our last draw
             _timeElapsed += gameTime.ElapsedGameTime.TotalSeconds;
 
             //We need to change our image if our timeElapsed is greater than our timeToUpdate(calculated by our framerate)
             if (_timeElapsed > _timeToUpdate)
-            {   
+            {
                 //Resets the timer in a way, so that we keep our desired FPS
                 _timeElapsed -= _timeToUpdate;
 
                 //Adds one to our frameIndex
-                if (_frameIndex < sAnimations[currentAnimation].Length -1)
+                if (_frameIndex < sAnimations[currentAnimation].Length - 1)
                 {
                     _frameIndex++;
                 }
@@ -139,7 +139,7 @@ namespace CatchMeUp.Core.Game
         /// <param name="spriteBatch">SpriteBatch</param>
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(sTexture, sPostion+sOffsets[currentAnimation], sAnimations[currentAnimation][_frameIndex], Color.White);
+            spriteBatch.Draw(sTexture, sPostion + sOffsets[currentAnimation], sAnimations[currentAnimation][_frameIndex], Color.White);
         }
 
         /// <summary>

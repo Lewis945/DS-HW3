@@ -11,7 +11,7 @@ namespace CatchMeUp.Core.Game
 {
     public class Engine
     {
-        private object _synch = new object();
+        //private object _synch = new object();
 
         public int Time { get; set; } = 120000;
 
@@ -67,6 +67,7 @@ namespace CatchMeUp.Core.Game
                         {
                             CurrentPlayer.IsDead = true;
                             CurrentPlayer.Team = Team.Spectator;
+                            RemovePlayer(CurrentPlayer);
                         }
                         else if (CurrentPlayer.Team == Team.Hunted && (CurrentPlayer.TimeStamp - DateTime.Now).TotalMilliseconds > Time)
                         {
@@ -98,14 +99,14 @@ namespace CatchMeUp.Core.Game
 
         public void MovePlayer(Player player)
         {
-            var currentMapPosition = _map.IndexesOf(player.Name);
-            var currentWindowPosition = GetWindowToMapPosition(player.Postion.X, player.Postion.Y);
-
-            if (!currentMapPosition.Equals(currentWindowPosition))
+            if (!player.IsDead)
             {
-                if (!DetectCollision(player, currentWindowPosition.Item1, currentWindowPosition.Item2))
+                var currentMapPosition = _map.IndexesOf(player.Name);
+                var currentWindowPosition = GetWindowToMapPosition(player.Postion.X, player.Postion.Y);
+
+                if (!currentMapPosition.Equals(currentWindowPosition))
                 {
-                    lock (_synch)
+                    if (!DetectCollision(player, currentWindowPosition.Item1, currentWindowPosition.Item2))
                     {
                         _map[currentMapPosition.Item1, currentMapPosition.Item2] = null;
                         _map[currentWindowPosition.Item1, currentWindowPosition.Item2] = player.Name;
@@ -132,25 +133,28 @@ namespace CatchMeUp.Core.Game
             return _map[currentMapPosition.Item1, currentMapPosition.Item2] == null ? false : true;
         }
 
-        private bool DetectCollision(Player currentPlayer, int x, int y)
+        private bool DetectCollision(Player movingPlayer, int x, int y)
         {
             var nextCell = _map[x, y];
             if (nextCell != null)
             {
-                var player = Players.FirstOrDefault(p => p.Name == nextCell);
+                var player = Players.FirstOrDefault(p => p.Name == nextCell && p.Name != movingPlayer.Name);
                 if (player != null)
                 {
-                    if (player.Team == currentPlayer.Team)
+                    if (player.Team == movingPlayer.Team)
                     {
                         return true;
                     }
-                    else if (CurrentPlayer.Name == currentPlayer.Name && currentPlayer.Team == Team.Hunter)
+                    else if (CurrentPlayer.Name == movingPlayer.Name && movingPlayer.Team == Team.Hunter || CurrentPlayer.Name == player.Name && movingPlayer.Team == Team.Hunted)
                     {
                         CurrentPlayer.Score++;
                     }
-                    else if (CurrentPlayer.Name == currentPlayer.Name && currentPlayer.Team == Team.Hunted)
+                    else if (CurrentPlayer.Name == player.Name && movingPlayer.Team == Team.Hunter || CurrentPlayer.Name == movingPlayer.Name && movingPlayer.Team == Team.Hunted)
                     {
                         CurrentPlayer.IsDead = true;
+                        CurrentPlayer.Team = Team.Spectator;
+                        RemovePlayer(CurrentPlayer);
+                        return true;
                     }
                 }
             }
